@@ -9,8 +9,4 @@
     <ProjectReference Include="..\cafeteria.data\cafeteria.data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="repositorys\" />
-  </ItemGroup>
-
 </Project>
