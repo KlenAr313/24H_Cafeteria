@@ -30,11 +30,11 @@ namespace cafeteria.service.repositorys
 
         public Product Create(Product product)
         {
-            var allItems = GetAll();
+            var allProducts = GetAll();
             int maxId = 0;
-            if (allItems.Count() > 0)
+            if (allProducts.Count() > 0)
             {
-                maxId = allItems.Max(e => e.Id);
+                maxId = allProducts.Max(e => e.Id);
             }
             product.Id = maxId + 1;
             using (StreamWriter sw = new StreamWriter(fileName, true))
@@ -43,6 +43,35 @@ namespace cafeteria.service.repositorys
                 sw.Close();
             }
             return product;
+        }
+
+        public Product Update(Product product)
+        {
+            var allProducts = GetAll().ToList();
+            RemoveItemFromList(product, allProducts);
+            allProducts.Add(product);
+            WriteItemsToList(allProducts);
+            return product;
+        }
+
+
+        private void RemoveItemFromList(Product product, List<Product> allProducts)
+        {
+            var foundProduct = allProducts.FirstOrDefault(e => e.Id == product.Id);
+            if (foundProduct == null)
+            {
+                throw new KeyNotFoundException($"Id {product.Id} not found");
+            }
+            allProducts.Remove(foundProduct);
+        }
+
+        private void WriteItemsToList(List<Product> products)
+        {
+            using(StreamWriter sw = new StreamWriter(fileName, false))
+            {
+                products.ForEach(e => sw.WriteLine(e));
+                sw.Close();
+            }
         }
     }
 }
