@@ -28,6 +28,15 @@ namespace cafeteria.service.repositorys
             return products;
         }
 
+        public ProductRepository()
+        { }
+
+        public Product GetById(int id)
+        {
+            var allProduct = GetAll().ToList();
+            return allProduct.FirstOrDefault(i => i.Id == id);
+        }
+
         public Product Create(Product product)
         {
             var allProducts = GetAll();
@@ -52,6 +61,12 @@ namespace cafeteria.service.repositorys
             allProducts.Add(product);
             WriteItemsToList(allProducts);
             return product;
+        }
+
+        public void Delete(Product product)
+        {
+            product.IsDeleted = true;
+            Update(product);
         }
 
 
